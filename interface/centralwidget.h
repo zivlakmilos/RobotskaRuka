@@ -32,10 +32,19 @@ private:
 
     QByteArray data;
 
-    bool useCv;
+    int lowH;
+    int highH;
+    int lowS;
+    int highS;
+    int lowV;
+    int highV;
+
+    int x;
+    int y;
 
 private slots:
     void robotStateChanged();
+    void tabChanged(int index);
     void render();
 };
 
