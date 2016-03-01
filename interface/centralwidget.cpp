@@ -195,21 +195,33 @@ void CentralWidget::render()
         {
             case CV_8UC4:
                 original = QImage(matOriginal.data, matOriginal.cols, matOriginal.rows, matOriginal.step, QImage::Format_RGB32);
-                filter = QImage(matFilter.data, matFilter.cols, matFilter.rows, matFilter.step, QImage::Format_RGB32);
                 break;
             case CV_8UC3:
                 original = QImage(matOriginal.data, matOriginal.cols, matOriginal.rows, matOriginal.step, QImage::Format_RGB888);
-                filter = QImage(matFilter.data, matFilter.cols, matFilter.rows, matFilter.step, QImage::Format_RGB888);
                 original.rgbSwapped();
-                filter.rgbSwapped();
                 break;
             case CV_8UC1:
                 static QVector<QRgb> colorTable;
                     for(int i = 0; i < 256; i++)
                         colorTable.push_back(qRgb(i, i, i));
                 original = QImage(matOriginal.data, matOriginal.cols, matOriginal.rows, matOriginal.step, QImage::Format_Indexed8);
-                filter = QImage(matFilter.data, matFilter.cols, matFilter.rows, matFilter.step, QImage::Format_Indexed8);
                 original.setColorTable(colorTable);
+                break;
+        }
+        switch(matFilter.type())
+        {
+            case CV_8UC4:
+                filter = QImage(matFilter.data, matFilter.cols, matFilter.rows, matFilter.step, QImage::Format_RGB32);
+                break;
+            case CV_8UC3:
+                filter = QImage(matFilter.data, matFilter.cols, matFilter.rows, matFilter.step, QImage::Format_RGB888);
+                filter.rgbSwapped();
+                break;
+            case CV_8UC1:
+                static QVector<QRgb> colorTable;
+                    for(int i = 0; i < 256; i++)
+                        colorTable.push_back(qRgb(i, i, i));
+                filter = QImage(matFilter.data, matFilter.cols, matFilter.rows, matFilter.step, QImage::Format_Indexed8);
                 filter.setColorTable(colorTable);
                 break;
         }
