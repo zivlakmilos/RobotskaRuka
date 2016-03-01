@@ -17,6 +17,8 @@ public:
 };
 /* Za delay */
 
+using namespace cv;
+
 CentralWidget::CentralWidget(QextSerialPort *port, QWidget *parent) :
     QTabWidget(parent),
     ui(new Ui::CentralWidget)
@@ -29,6 +31,8 @@ CentralWidget::CentralWidget(QextSerialPort *port, QWidget *parent) :
     this->timer->setInterval(10);
 
     this->useCv = false;
+
+    this->capture = VideoCapture(0);
     
     connect(ui->dialRot, SIGNAL(valueChanged(int)),
             ui->sbRot, SLOT(setValue(int)));
@@ -115,4 +119,35 @@ void CentralWidget::robotStateChanged()
 
 void CentralWidget::render()
 {
+    if(capture.isOpened())
+    {
+        Mat matOriginal;
+        Mat matFilter;
+        QImage original;
+        QImage filter;
+
+        if(!capture.read(matOriginal))
+            return;
+
+        switch(matOriginal.type())
+        {
+            case CV_8UC4:
+                original = QImage(matOriginal.data, matOriginal.cols, matOriginal.rows, matOriginal.step, QImage::Format_RGB32);
+                break;
+            case CV_8UC3:
+                original = QImage(matOriginal.data, matOriginal.cols, matOriginal.rows, matOriginal.step, QImage::Format_RGB888);
+                original.rgbSwapped();
+                break;
+            case CV_8UC1:
+                break;
+        }
+
+        original = original.scaled(ui->imgOriginal->width(),
+                                   ui->imgOriginal->height(),
+                                   Qt::KeepAspectRatio);
+
+        filter = original;
+        ui->imgOriginal->setPixmap(QPixmap::fromImage(original));
+        ui->imgFilter->setPixmap(QPixmap::fromImage(filter));
+    }
 }

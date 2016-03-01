@@ -3,6 +3,8 @@
 
 #include <QTabWidget>
 
+
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
 class QextSerialPort;
@@ -26,10 +28,7 @@ private:
 
     QTimer *timer;
 
-    cv::Mat matOriginal;
-    cv::Mat matOfilter;
-    QImage *original;
-    QImage *filter;
+    cv::VideoCapture capture;
 
     QByteArray data;
 
