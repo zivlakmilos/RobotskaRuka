@@ -32,12 +32,12 @@ CentralWidget::CentralWidget(QextSerialPort *port, QWidget *parent) :
 
     this->capture = VideoCapture(0);
 
-    lowH = 0;
-    highH = 0;
-    lowS = 0;
-    highS = 10;
-    lowV = 10;
-    highV = 10;
+    lowH = 170;
+    highH = 179;
+    lowS = 150;
+    highS = 255;
+    lowV = 60;
+    highV = 255;
 
     this->x = -1;
     this->y = -1;
@@ -73,6 +73,51 @@ CentralWidget::CentralWidget(QextSerialPort *port, QWidget *parent) :
             this, SLOT(robotStateChanged()));
     connect(ui->sbHvat, SIGNAL(valueChanged(int)),
             this, SLOT(robotStateChanged()));
+
+    connect(ui->sbHH, SIGNAL(valueChanged(int)),
+            ui->hsHH, SLOT(setValue(int)));
+    connect(ui->sbHL, SIGNAL(valueChanged(int)),
+            ui->hsHL, SLOT(setValue(int)));
+    connect(ui->sbSH, SIGNAL(valueChanged(int)),
+            ui->hsSH, SLOT(setValue(int)));
+    connect(ui->sbSL, SIGNAL(valueChanged(int)),
+            ui->hsSL, SLOT(setValue(int)));
+    connect(ui->sbVH, SIGNAL(valueChanged(int)),
+            ui->hsVH, SLOT(setValue(int)));
+    connect(ui->sbVL, SIGNAL(valueChanged(int)),
+            ui->hsVL, SLOT(setValue(int)));
+    connect(ui->hsHH, SIGNAL(valueChanged(int)),
+            ui->sbHH, SLOT(setValue(int)));
+    connect(ui->hsHL, SIGNAL(valueChanged(int)),
+            ui->sbHL, SLOT(setValue(int)));
+    connect(ui->hsSH, SIGNAL(valueChanged(int)),
+            ui->sbSH, SLOT(setValue(int)));
+    connect(ui->hsSL, SIGNAL(valueChanged(int)),
+            ui->sbSL, SLOT(setValue(int)));
+    connect(ui->hsVH, SIGNAL(valueChanged(int)),
+            ui->sbVH, SLOT(setValue(int)));
+    connect(ui->hsVL, SIGNAL(valueChanged(int)),
+            ui->sbVL, SLOT(setValue(int)));
+
+    connect(ui->sbHH, SIGNAL(valueChanged(int)),
+            this, SLOT(cvOptionsChanged()));
+    connect(ui->sbHL, SIGNAL(valueChanged(int)),
+            this, SLOT(cvOptionsChanged()));
+    connect(ui->sbSH, SIGNAL(valueChanged(int)),
+            this, SLOT(cvOptionsChanged()));
+    connect(ui->sbSL, SIGNAL(valueChanged(int)),
+            this, SLOT(cvOptionsChanged()));
+    connect(ui->sbVH, SIGNAL(valueChanged(int)),
+            this, SLOT(cvOptionsChanged()));
+    connect(ui->sbVL, SIGNAL(valueChanged(int)),
+            this, SLOT(cvOptionsChanged()));
+
+    ui->sbHH->setValue(highH);
+    ui->sbHL->setValue(lowH);
+    ui->sbSH->setValue(highS);
+    ui->sbSL->setValue(lowS);
+    ui->sbVH->setValue(highV);
+    ui->sbVL->setValue(lowV);
 
     connect(this, SIGNAL(currentChanged(int)),
             this, SLOT(tabChanged(int)));
@@ -134,6 +179,16 @@ void CentralWidget::tabChanged(int index)
         this->timer->stop();
 }
 
+void CentralWidget::cvOptionsChanged()
+{
+    this->highH = ui->sbHH->value();
+    this->lowH = ui->sbHL->value();
+    this->highS = ui->sbSH->value();
+    this->lowS = ui->sbSL->value();
+    this->highV = ui->sbVH->value();
+    this->lowV = ui->sbVL->value();
+}
+
 void CentralWidget::render()
 {
     if(capture.isOpened())
@@ -183,6 +238,8 @@ void CentralWidget::render()
                 *  Send to Arduino
                 *  (cakculate and change value for Tab1 elements)
                 */
+                ui->sbRot->setValue((posX * 180) / matOriginal.rows);
+                qDebug() << ui->sbRot->value();
             }
 
             this->x = posX;
