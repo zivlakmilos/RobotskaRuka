@@ -27,56 +27,56 @@ position_t endPosition;             // Krajnja pozicija
 
 void postavi(void)
 {
-    rot.write(position.rot);
-    seg1.write(position.seg1);
-    seg2.write(position.seg2);
+    rot.write(180 - position.rot);
+    seg1.write(180 - position.seg1);
+    seg2.write(180 - position.seg2);
     seg3.write(position.seg3);
     hvat.write(position.hvat);
 }
 
-void pomeri(int rotacija, int segment1, int segment2, int segment3, int hvataljka, int brzina)
-{
-    unsigned char finish;
-
-    do
-    {
-        finish = 0;
-
-        if(position.rot > rotacija)
-            position.rot--;
-        else if(position.rot < rotacija)
-            position.rot++;
-        else
-            finish++;
-        if(position.seg1 > segment1)
-            position.seg1--;
-        else if(position.seg1 < segment1)
-            position.seg1++;
-        else
-            finish++;
-        if(position.seg2 > segment2)
-            position.seg2--;
-        else if(position.seg2 < segment2)
-            position.seg2++;
-        else
-            finish++;
-        if(position.seg3 > segment3)
-            position.seg3--;
-        else if(position.seg3 < segment3)
-            position.seg3++;
-        else
-            finish++;
-        if(position.hvat > hvataljka)
-            position.hvat--;
-        else if(position.hvat < hvataljka)
-            position.hvat++;
-        else
-            finish++;
-
-        postavi();
-        delay(brzina);
-    } while(finish < 5);
-}
+//void pomeri(int rotacija, int segment1, int segment2, int segment3, int hvataljka, int brzina)
+//{
+//    unsigned char finish;
+//
+//    do
+//    {
+//        finish = 0;
+//
+//        if(position.rot > rotacija)
+//            position.rot--;
+//        else if(position.rot < rotacija)
+//            position.rot++;
+//        else
+//            finish++;
+//        if(position.seg1 > segment1)
+//            position.seg1--;
+//        else if(position.seg1 < segment1)
+//            position.seg1++;
+//        else
+//            finish++;
+//        if(position.seg2 > segment2)
+//            position.seg2--;
+//        else if(position.seg2 < segment2)
+//            position.seg2++;
+//        else
+//            finish++;
+//        if(position.seg3 > segment3)
+//            position.seg3--;
+//        else if(position.seg3 < segment3)
+//            position.seg3++;
+//        else
+//            finish++;
+//        if(position.hvat > hvataljka)
+//            position.hvat--;
+//        else if(position.hvat < hvataljka)
+//            position.hvat++;
+//        else
+//            finish++;
+//
+//        postavi();
+//        delay(brzina);
+//    } while(finish < 5);
+//}
 
 void setup(void)
 {
