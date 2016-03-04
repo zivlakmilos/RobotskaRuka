@@ -16,11 +16,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
            mainwindow.cpp \
            opencvwidget.cpp \
-           centralwidget.cpp
+           centralwidget.cpp \
+    handgesture.cpp
 
 HEADERS  += mainwindow.h \
             opencvwidget.h \
-            centralwidget.h
+            centralwidget.h \
+    handgesture.h
 
 FORMS    += mainwindow.ui \
             centralwidget.ui
