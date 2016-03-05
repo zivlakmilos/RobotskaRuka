@@ -6,6 +6,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+class HandGesture;
+
 class QextSerialPort;
 
 namespace Ui {
@@ -27,24 +29,18 @@ private:
 
     QTimer *timer;
 
-    cv::VideoCapture capture;
-
     QByteArray data;
 
-    int lowH;
-    int highH;
-    int lowS;
-    int highS;
-    int lowV;
-    int highV;
+    HandGesture *handGesture;
 
-    int x;
-    int y;
+    bool cvIsOk;
+    bool colorIsPicked;
+    int timerMilisec;
 
 private slots:
     void robotStateChanged();
     void tabChanged(int index);
-    void cvOptionsChanged();
+//    void cvOptionsChanged();
     void render();
 };
 
