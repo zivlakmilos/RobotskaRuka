@@ -94,6 +94,13 @@ void HandGesture::trackHand(int *rot, int *seg1, int *seg2, int *seg3)
         return;
 
     cvtColor(this->original, this->filter, CV_BGR2HSV);
+
+    inRange(this->original, Scalar(this->colorLow[0], this->colorLow[1], this->colorLow[2]),
+                            Scalar(this->colorHight[0], this->colorHight[1], this->colorHight[2]),
+            this->filter);
+
+    flip(this->original, this->original, 1);
+    flip(this->filter, this->filter, 1);
 }
 
 QImage HandGesture::matToImg(int type = ImageOriginal)

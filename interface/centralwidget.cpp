@@ -208,11 +208,13 @@ void CentralWidget::render()
             this->cvIsOk = false;
             return;
         }
-        QImage original = this->handGesture->matToImg(HandGesture::ImageOriginal);
-        ui->imgOriginal->setPixmap(QPixmap::fromImage(original));
-        QImage filter = this->handGesture->matToImg(HandGesture::ImageFilter);
-        ui->imgFilter->setPixmap(QPixmap::fromImage(filter));
-
-        return;
+    } else
+    {
+        this->handGesture->trackHand(0, 0, 0, 0);
     }
+
+    QImage original = this->handGesture->matToImg(HandGesture::ImageOriginal);
+    ui->imgOriginal->setPixmap(QPixmap::fromImage(original));
+    QImage filter = this->handGesture->matToImg(HandGesture::ImageFilter);
+    ui->imgFilter->setPixmap(QPixmap::fromImage(filter));
 }
