@@ -22,8 +22,11 @@ public:
     HandGesture();
 
     bool pickColor(bool pick);
-    void trackHand(int *rot, int *seg1, int *seg2, int *seg3);
+    bool trackHand(int *rot, int *seg1, int *seg2, int *seg3);
     QImage matToImg(int type);
+
+    void setColorLow(int h, int s, int v);
+    void setColorHigh(int h, int s, int v);
 
     enum { ImageOriginal = 0, ImageFilter };
 
@@ -36,15 +39,8 @@ private:
 
     std::vector<Rect> colorPickerRect;
 
-    int colorLow[3] = { 0, 0, 0 };
-    int colorHight[3] = {180, 255, 255 };
-
-    int huleL;
-    int huleH;
-    int saturationL;
-    int saturationH;
-    int valueL;
-    int valueH;
+    int colorLow[3];
+    int colorHigh[3];
 };
 
 #endif // HANDGESTURE_H

@@ -95,31 +95,31 @@ CentralWidget::CentralWidget(QextSerialPort *port, QWidget *parent) :
     connect(ui->hsVL, SIGNAL(valueChanged(int)),
             ui->sbVL, SLOT(setValue(int)));
 
-//    connect(ui->sbHH, SIGNAL(valueChanged(int)),
-//            this, SLOT(cvOptionsChanged()));
-//    connect(ui->sbHL, SIGNAL(valueChanged(int)),
-//            this, SLOT(cvOptionsChanged()));
-//    connect(ui->sbSH, SIGNAL(valueChanged(int)),
-//            this, SLOT(cvOptionsChanged()));
-//    connect(ui->sbSL, SIGNAL(valueChanged(int)),
-//            this, SLOT(cvOptionsChanged()));
-//    connect(ui->sbVH, SIGNAL(valueChanged(int)),
-//            this, SLOT(cvOptionsChanged()));
-//    connect(ui->sbVL, SIGNAL(valueChanged(int)),
-//            this, SLOT(cvOptionsChanged()));
-
-//    ui->sbHH->setValue(highH);
-//    ui->sbHL->setValue(lowH);
-//    ui->sbSH->setValue(highS);
-//    ui->sbSL->setValue(lowS);
-//    ui->sbVH->setValue(highV);
-//    ui->sbVL->setValue(lowV);
+    connect(ui->sbHH, SIGNAL(valueChanged(int)),
+            this, SLOT(cvOptionsChanged()));
+    connect(ui->sbHL, SIGNAL(valueChanged(int)),
+            this, SLOT(cvOptionsChanged()));
+    connect(ui->sbSH, SIGNAL(valueChanged(int)),
+            this, SLOT(cvOptionsChanged()));
+    connect(ui->sbSL, SIGNAL(valueChanged(int)),
+            this, SLOT(cvOptionsChanged()));
+    connect(ui->sbVH, SIGNAL(valueChanged(int)),
+            this, SLOT(cvOptionsChanged()));
+    connect(ui->sbVL, SIGNAL(valueChanged(int)),
+            this, SLOT(cvOptionsChanged()));
 
     connect(this, SIGNAL(currentChanged(int)),
             this, SLOT(tabChanged(int)));
 
     connect(this->timer, SIGNAL(timeout()),
             this, SLOT(render()));
+
+    ui->sbHL->setValue(210);
+    ui->sbSL->setValue(0);
+    ui->sbVL->setValue(0);
+    ui->sbHH->setValue(255);
+    ui->sbSH->setValue(255);
+    ui->sbVH->setValue(255);
 }
 
 CentralWidget::~CentralWidget()
@@ -176,41 +176,54 @@ void CentralWidget::tabChanged(int index)
         this->timer->stop();
 }
 
-//void CentralWidget::cvOptionsChanged()
-//{
-//    this->highH = ui->sbHH->value();
-//    this->lowH = ui->sbHL->value();
-//    this->highS = ui->sbSH->value();
-//    this->lowS = ui->sbSL->value();
-//    this->highV = ui->sbVH->value();
-//    this->lowV = ui->sbVL->value();
-//}
+void CentralWidget::cvOptionsChanged()
+{
+    this->handGesture->setColorLow(ui->sbHL->value(),
+                                   ui->sbSL->value(),
+                                   ui->sbVL->value());
+    this->handGesture->setColorHigh(ui->sbHH->value(),
+                                    ui->sbSH->value(),
+                                    ui->sbVH->value());
+}
 
 void CentralWidget::render()
 {
     if(!this->cvIsOk)
         return;
 
-    if(!this->colorIsPicked)
+//    if(!this->colorIsPicked)
+//    {
+//        this->timerMilisec += 40;
+//        if(timerMilisec >= 3000)
+//            this->colorIsPicked = true;
+//        this->cvIsOk = this->handGesture->pickColor(this->colorIsPicked);
+//        if(!this->cvIsOk)
+//        {
+//            QMessageBox::warning(this, tr("Robotksa Ruka"),
+//                                tr("Ovaj nacin rada nije podrzan!<brr />"
+//                                   "Proverite da li je kamera povezana i da li imate drajvere"
+//                                   "zatim ponovo pokrenite program.<br /><br />"
+//                                   "Ako ponovo bude problema, obratite se na mail koji mozete prociteti u \"O programu\"."),
+//                                QMessageBox::Ok);
+//            this->cvIsOk = false;
+//            return;
+//        }
+//    } else
+//    {
+//        this->handGesture->trackHand(0, 0, 0, 0);
+//    }
+
+    this->cvIsOk = this->handGesture->trackHand(0, 0, 0, 0);
+    if(!this->cvIsOk)
     {
-        this->timerMilisec += 40;
-        if(timerMilisec >= 3000)
-            this->colorIsPicked = true;
-        this->cvIsOk = this->handGesture->pickColor(this->colorIsPicked);
-        if(!this->cvIsOk)
-        {
-            QMessageBox::warning(this, tr("Robotksa Ruka"),
-                                tr("Ovaj nacin rada nije podrzan!<brr />"
-                                   "Proverite da li je kamera povezana i da li imate drajvere"
-                                   "zatim ponovo pokrenite program.<br /><br />"
-                                   "Ako ponovo bude problema, obratite se na mail koji mozete prociteti u \"O programu\"."),
-                                QMessageBox::Ok);
-            this->cvIsOk = false;
-            return;
-        }
-    } else
-    {
-        this->handGesture->trackHand(0, 0, 0, 0);
+        QMessageBox::warning(this, tr("Robotksa Ruka"),
+                             tr("Ovaj nacin rada nije podrzan!<brr />"
+                                "Proverite da li je kamera povezana i da li imate drajvere"
+                                "zatim ponovo pokrenite program.<br /><br />"
+                                "Ako ponovo bude problema, obratite se na mail koji mozete prociteti u \"O programu\"."),
+                             QMessageBox::Ok);
+        this->cvIsOk = false;
+        return;
     }
 
     QImage original = this->handGesture->matToImg(HandGesture::ImageOriginal);

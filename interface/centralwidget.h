@@ -40,7 +40,7 @@ private:
 private slots:
     void robotStateChanged();
     void tabChanged(int index);
-//    void cvOptionsChanged();
+    void cvOptionsChanged();
     void render();
 };
 

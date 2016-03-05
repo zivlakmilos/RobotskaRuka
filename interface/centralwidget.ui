@@ -274,7 +274,7 @@
       <item row="1" column="1">
        <widget class="QSlider" name="hsHH">
         <property name="maximum">
-         <number>179</number>
+         <number>255</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -311,7 +311,7 @@
       <item row="0" column="1">
        <widget class="QSlider" name="hsHL">
         <property name="maximum">
-         <number>179</number>
+         <number>255</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -362,14 +362,14 @@
       <item row="0" column="2">
        <widget class="QSpinBox" name="sbHL">
         <property name="maximum">
-         <number>179</number>
+         <number>255</number>
         </property>
        </widget>
       </item>
       <item row="1" column="2">
        <widget class="QSpinBox" name="sbHH">
         <property name="maximum">
-         <number>179</number>
+         <number>255</number>
         </property>
        </widget>
       </item>
