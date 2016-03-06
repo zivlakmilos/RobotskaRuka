@@ -114,7 +114,7 @@ CentralWidget::CentralWidget(QextSerialPort *port, QWidget *parent) :
     connect(this->timer, SIGNAL(timeout()),
             this, SLOT(render()));
 
-    ui->sbHL->setValue(210);
+    ui->sbHL->setValue(220);
     ui->sbSL->setValue(0);
     ui->sbVL->setValue(0);
     ui->sbHH->setValue(255);
@@ -213,7 +213,8 @@ void CentralWidget::render()
 //        this->handGesture->trackHand(0, 0, 0, 0);
 //    }
 
-    this->cvIsOk = this->handGesture->trackHand(0, 0, 0, 0);
+    int rot, seg1, seg2, seg3;
+    this->cvIsOk = this->handGesture->trackHand(&rot, &seg1, &seg2, &seg3);
     if(!this->cvIsOk)
     {
         QMessageBox::warning(this, tr("Robotksa Ruka"),
@@ -225,6 +226,11 @@ void CentralWidget::render()
         this->cvIsOk = false;
         return;
     }
+
+    ui->sbRot->setValue(rot);
+    ui->sbSeg1->setValue(seg1);
+    ui->sbSeg2->setValue(seg2);
+    ui->sbSeg3->setValue(seg3);
 
     QImage original = this->handGesture->matToImg(HandGesture::ImageOriginal);
     ui->imgOriginal->setPixmap(QPixmap::fromImage(original));

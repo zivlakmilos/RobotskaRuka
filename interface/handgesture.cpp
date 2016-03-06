@@ -154,7 +154,8 @@ bool HandGesture::trackHand(int *rot, int *seg1, int *seg2, int *seg3)
     inRange(this->original, Scalar(this->colorLow[0], this->colorLow[1], this->colorLow[2]),
                             Scalar(this->colorHigh[0], this->colorHigh[1], this->colorHigh[2]),
             this->filter);
-    cv::GaussianBlur(this->filter, this->filter, cv::Size(9, 9), 2, 2);
+//    GaussianBlur(this->filter, this->filter, cv::Size(9, 9), 2, 2);
+    medianBlur(this->filter, this->filter, 7);
 
     flip(this->original, this->original, 1);
     flip(this->filter, this->filter, 1);
