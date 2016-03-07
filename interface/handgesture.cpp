@@ -157,8 +157,36 @@ bool HandGesture::trackHand(int *rot, int *seg1, int *seg2, int *seg3)
 //    GaussianBlur(this->filter, this->filter, cv::Size(9, 9), 2, 2);
     medianBlur(this->filter, this->filter, 7);
 
+    Mat tmpFilter = this->filter.clone();
+    vector<vector<Point> > contures;
+    vector<Vec4i> hierarchy;
+    findContours(tmpFilter, contures, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
+
+    int largest[2] = { 0, 0 };
+    cv::Rect bounding_rect;
+    for(int i = 0; i < contures.size(); i++)
+    {
+        double a = contourArea(contures[i], false);
+        if(a > largest[1])
+        {
+            largest[0] = i;
+            largest[1] = a;
+            bounding_rect = boundingRect(contures[i]);
+        }
+    }
+
+    drawContours(this->original, contures, largest[0], Scalar(255, 0, 0), CV_FILLED, 8, hierarchy);
+    rectangle(this->original, bounding_rect, Scalar(0, 0, 255), 1, 8, 0);
+
     flip(this->original, this->original, 1);
     flip(this->filter, this->filter, 1);
+
+    int x = this->original.cols - (bounding_rect.x + bounding_rect.width / 2);
+    int y = this->original.rows - (bounding_rect.y + bounding_rect.height / 2);
+
+    qDebug("x: %d\ty: %d", x, y);
+
+    *rot = (x * 180) / this->original.cols;
 
     return true;
 }
@@ -221,7 +249,6 @@ void HandGesture::setColorLow(int h, int s, int v)
     this->colorLow[0] = h;
     this->colorLow[1] = s;
     this->colorLow[2] = v;
-    qDebug("%d\t%d\t%d", this->colorLow[0], this->colorLow[1], this->colorLow[2]);
 }
 
 void HandGesture::setColorHigh(int h, int s, int v)
@@ -229,5 +256,4 @@ void HandGesture::setColorHigh(int h, int s, int v)
     this->colorHigh[0] = h;
     this->colorHigh[1] = s;
     this->colorHigh[2] = v;
-    qDebug("%d\t%d\t%d", this->colorHigh[0], this->colorHigh[1], this->colorHigh[2]);
 }
