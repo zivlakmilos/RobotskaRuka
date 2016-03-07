@@ -171,7 +171,13 @@ void CentralWidget::robotStateChanged()
 void CentralWidget::tabChanged(int index)
 {
     if(index == 1)
+    {
+        this->rot = ui->sbRot->value();
+        this->seg1 = ui->sbSeg1->value();
+        this->seg2 = ui->sbSeg2->value();
+        this->seg3 = ui->sbSeg3->value();
         this->timer->start();
+    }
     else
         this->timer->stop();
 }
@@ -213,8 +219,7 @@ void CentralWidget::render()
 //        this->handGesture->trackHand(0, 0, 0, 0);
 //    }
 
-    int rot, seg1, seg2, seg3;
-    this->cvIsOk = this->handGesture->trackHand(&rot, &seg1, &seg2, &seg3);
+    this->cvIsOk = this->handGesture->trackHand(&this->rot, &this->seg1, &this->seg2, &this->seg3);
     if(!this->cvIsOk)
     {
         QMessageBox::warning(this, tr("Robotksa Ruka"),
@@ -227,10 +232,10 @@ void CentralWidget::render()
         return;
     }
 
-    ui->sbRot->setValue(rot);
-    ui->sbSeg1->setValue(seg1);
-    ui->sbSeg2->setValue(seg2);
-    ui->sbSeg3->setValue(seg3);
+    ui->sbRot->setValue(this->rot);
+    ui->sbSeg1->setValue(this->seg1);
+    ui->sbSeg2->setValue(this->seg2);
+    ui->sbSeg3->setValue(this->seg3);
 
     QImage original = this->handGesture->matToImg(HandGesture::ImageOriginal);
     ui->imgOriginal->setPixmap(QPixmap::fromImage(original));

@@ -37,6 +37,11 @@ private:
     bool colorIsPicked;
     int timerMilisec;
 
+    int rot;
+    int seg1;
+    int seg2;
+    int seg3;
+
 private slots:
     void robotStateChanged();
     void tabChanged(int index);
