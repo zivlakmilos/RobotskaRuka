@@ -186,12 +186,16 @@ bool HandGesture::trackHand(int *rot, int *seg1, int *seg2, int *seg3)
 
     qDebug("x: %d\ty: %d", x, y);
 
-    /* rot : 180 = x : cols */
-    *rot = (x * 180) / this->original.cols;
-    *seg1 = (x * 90) / this->original.cols;
-    *seg1 += 90;
-    *seg2 = 90 - *seg1 / 2;
-    *seg3 = 90 - *seg1 / 2;
+    /* If object is detect */
+    if(x < this->original.cols && y < this->original.rows)
+    {
+        /* rot : 180 = x : cols */
+        *rot = (x * 180) / this->original.cols;
+        *seg1 = (y * 90) / this->original.rows;
+        *seg1 += 90;
+        *seg2 = 90 - *seg1 / 2;
+        *seg3 = 90 - *seg1 / 2;
+    }
 
     return true;
 }

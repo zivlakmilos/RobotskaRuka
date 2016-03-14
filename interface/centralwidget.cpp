@@ -118,7 +118,7 @@ CentralWidget::CentralWidget(QextSerialPort *port, QWidget *parent) :
     ui->sbSL->setValue(0);
     ui->sbVL->setValue(0);
     ui->sbHH->setValue(255);
-    ui->sbSH->setValue(255);
+    ui->sbSH->setValue(215);
     ui->sbVH->setValue(255);
 }
 
